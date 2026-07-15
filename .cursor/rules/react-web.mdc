@@ -1,0 +1,71 @@
+---
+description: Convenções React para apps/web
+globs: apps/web/**/*
+alwaysApply: false
+---
+
+# React — apps/web
+
+## Atomic Design
+
+Organize componentes em `src/components/`:
+
+| Camada | Exemplos | Regra de import |
+|--------|----------|-----------------|
+| `atoms/` | Button, Input, Icon | Não importa camadas superiores |
+| `molecules/` | FormField, SearchBar | Só atoms |
+| `organisms/` | Header, ProductList | atoms + molecules |
+| `templates/` | PageLayout | atoms + molecules + organisms |
+| `pages/` (em `src/pages/`) | HomePage | Composição de todas as camadas |
+
+Estrutura por componente:
+
+```
+components/atoms/Button/
+  Button.tsx
+  Button.test.tsx
+  index.ts          → re-export (opcional)
+```
+
+## Tailwind
+
+- Estilização **somente** com classes Tailwind (`className`)
+- Não criar `.css` por componente
+- Variantes repetidas: helper `cn()` ou `@layer components` no CSS global
+- Responsivo: prefixos `sm:`, `md:`, `lg:`
+
+## Componentes
+
+- Apenas componentes funcionais com hooks
+- Lógica reutilizável em `src/hooks/`
+- Named exports
+- JSX sem lógica complexa inline
+
+## Testes obrigatórios
+
+Todo componente **deve** ter `ComponentName.test.tsx` colocalizado cobrindo:
+
+1. Renderização básica (props/default)
+2. Interação principal (click, submit, input)
+3. Variantes ou estados críticos (disabled, loading, error)
+
+Stack: Vitest + `@testing-library/react`.
+
+```bash
+pnpm --filter web test
+```
+
+## Acessibilidade
+
+- `alt` em imagens informativas
+- `type="button"` em botões que não são submit
+- `aria-hidden="true"` em ícones decorativos
+- Labels associados a inputs
+
+## Lint
+
+```bash
+pnpm lint:web
+```
+
+Oxlint é a fonte de verdade — não duplicar regras de estilo nas instruções.

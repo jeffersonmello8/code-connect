@@ -1,0 +1,82 @@
+---
+description: Padrões de testes unitários e e2e
+globs: **/*.{spec.ts,e2e-spec.ts,test.tsx}
+alwaysApply: false
+---
+
+# Testes
+
+## Frontend (apps/web) — obrigatório por componente
+
+Todo componente em `src/components/` **deve** ter teste colocalizado:
+
+```
+components/atoms/Button/Button.test.tsx
+```
+
+### O que testar (uso essencial)
+
+- Renderiza com props default
+- Interação principal (click, type, submit)
+- Estados críticos (disabled, loading, error, empty)
+
+### Stack
+
+Vitest + `@testing-library/react` + `@testing-library/user-event`
+
+```typescript
+import { render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { Button } from './Button'
+
+describe('Button', () => {
+  it('should render label', () => {
+    render(<Button>Salvar</Button>)
+    expect(screen.getByRole('button', { name: 'Salvar' })).toBeInTheDocument()
+  })
+
+  it('should call onClick when clicked', async () => {
+    const onClick = vi.fn()
+    render(<Button onClick={onClick}>Salvar</Button>)
+    await userEvent.click(screen.getByRole('button'))
+    expect(onClick).toHaveBeenCalledOnce()
+  })
+})
+```
+
+```bash
+pnpm --filter web test
+```
+
+## Backend (apps/api)
+
+- Unitários: colocalizados em `src/**/*.spec.ts`
+- E2E: `test/**/*.e2e-spec.ts`
+- Testar status HTTP, body e validação REST
+
+```typescript
+it('POST /users should return 201', () =>
+  request(app.getHttpServer())
+    .post('/users')
+    .send({ email: 'a@b.com' })
+    .expect(201))
+```
+
+## Princípios gerais
+
+- Testar comportamento visível/contrato, não implementação interna
+- Nomes descritivos: `should return 404 when user not found`
+- Arrange → Act → Assert
+
+## Comandos
+
+```bash
+pnpm --filter web test         # frontend
+pnpm --filter api test         # api unitários
+pnpm --filter api test:e2e     # api e2e
+```
+
+## Quando adicionar
+
+- **Web**: sempre que criar ou alterar componente
+- **Api**: novos endpoints, services ou correções de bug (regression)

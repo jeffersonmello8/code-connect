@@ -1,0 +1,80 @@
+---
+description: Fluxo de git, Conventional Commits e pull requests
+alwaysApply: false
+---
+
+# Git e PRs
+
+## Conventional Commits
+
+Todos os commits devem seguir [Conventional Commits](https://www.conventionalcommits.org/):
+
+```
+<type>(<scope>): <descrição>
+
+[corpo opcional]
+```
+
+### Types
+
+| Type | Uso |
+|------|-----|
+| `feat` | Nova funcionalidade |
+| `fix` | Correção de bug |
+| `docs` | Documentação |
+| `style` | Formatação (sem mudança de lógica) |
+| `refactor` | Refatoração |
+| `test` | Adicionar ou corrigir testes |
+| `chore` | Manutenção, deps, config |
+| `perf` | Performance |
+| `ci` | CI/CD |
+| `build` | Build system |
+
+### Scope
+
+Use o app ou módulo afetado:
+
+- `web` — frontend
+- `api` — backend
+- `web,api` — ambos (raro)
+
+### Exemplos
+
+```
+feat(web): add Button atom with Tailwind variants
+fix(api): return 404 when user not found
+test(web): add essential usage tests for SearchBar
+refactor(api): align users endpoint with REST conventions
+chore: add cursor rules for atomic design
+```
+
+### Regras
+
+- Descrição em imperativo, minúscula, sem ponto final
+- Máximo ~72 caracteres no subject
+- Breaking change: `feat(api)!: remove legacy /getUsers endpoint`
+
+## Commits
+
+- **Só commitar quando o usuário pedir explicitamente**
+- Nunca commitar `.env`, credenciais ou segredos
+- Nunca usar `--no-verify` ou pular hooks sem pedido explícito
+
+## Comandos proibidos (sem pedido explícito)
+
+- `git push --force` (especialmente em main/master)
+- `git reset --hard`
+- `git commit --amend` (exceto quando todas as condições de segurança forem atendidas)
+
+## Pull Requests
+
+- Usar `gh pr create` quando solicitado
+- Título do PR também em Conventional Commits
+- Incluir Summary e Test plan no body
+
+## Antes de commitar
+
+1. `git status` — verificar arquivos staged/unstaged
+2. `git diff` — revisar mudanças
+3. Confirmar formato Conventional Commits no subject
+4. Confirmar que não há segredos nos arquivos

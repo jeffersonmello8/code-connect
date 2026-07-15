@@ -1,0 +1,15 @@
+---
+description: Arquivar planos executados no repositório após conclusão
+alwaysApply: true
+---
+
+# Planos executados
+
+Após concluir um plano aprovado ou executado pelo usuário:
+
+1. Gravar resumo em `.cursor/plans/<slug>.md` (kebab-case ASCII)
+2. Incluir: título, overview, data de conclusão, principais entregas
+3. Manter arquivos concisos (sem frontmatter de todos do Cursor)
+4. A cópia em `.cursor/plans/` é o registro do projeto — não editar `~/.cursor/plans/` como fonte de verdade
+
+Exemplo de slug: `pagina-de-login.md`, `ajuste-login-e-planos.md`

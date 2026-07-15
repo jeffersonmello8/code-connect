@@ -1,0 +1,86 @@
+---
+description: Convenções NestJS e REST para apps/api
+globs: apps/api/**/*
+alwaysApply: false
+---
+
+# NestJS + REST — apps/api
+
+## Arquitetura
+
+- Um módulo por domínio/feature
+- Fluxo: `@Module` → `@Controller` → `@Service`
+- Injeção de dependência via construtor
+
+## REST — regras obrigatórias
+
+### URLs
+
+```
+GET    /users              → listar
+GET    /users/:id          → buscar um
+POST   /users              → criar (201)
+PUT    /users/:id          → substituir
+PATCH  /users/:id          → atualizar parcial
+DELETE /users/:id          → remover (204)
+```
+
+- Recursos no plural, sem verbos na URL
+- Query params: `?page=1&limit=20&sort=name&order=asc`
+
+### Status codes
+
+| Código | Quando |
+|--------|--------|
+| 200 | GET/PUT/PATCH com body |
+| 201 | POST criou recurso |
+| 204 | DELETE ou PUT/PATCH sem body |
+| 400 | Payload inválido (validação DTO) |
+| 404 | Recurso não encontrado |
+| 409 | Conflito (ex.: email duplicado) |
+
+### Controllers
+
+```typescript
+@Controller('users')
+export class UsersController {
+  @Get()
+  findAll(@Query() query: PaginationDto) { ... }
+
+  @Post()
+  @HttpCode(HttpStatus.CREATED)
+  create(@Body() dto: CreateUserDto) { ... }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id') id: string) { ... }
+}
+```
+
+### DTOs e validação
+
+- DTO separado para create e update (PATCH)
+- `class-validator` + `ValidationPipe` global
+- Respostas de erro padronizadas
+
+## Estrutura de arquivos
+
+```
+src/feature/
+  feature.module.ts
+  feature.controller.ts
+  feature.service.ts
+  feature.controller.spec.ts
+  dto/
+    create-feature.dto.ts
+    update-feature.dto.ts
+```
+
+## Lint e format
+
+```bash
+pnpm lint:api
+pnpm --filter api format
+```
+
+ESLint + Prettier são a fonte de verdade.

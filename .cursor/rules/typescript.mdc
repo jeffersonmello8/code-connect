@@ -1,0 +1,33 @@
+---
+description: Convenções TypeScript para todo o monorepo
+globs: **/*.{ts,tsx}
+alwaysApply: false
+---
+
+# TypeScript
+
+## Tipagem
+
+- Preferir tipos explícitos em parâmetros e retornos de funções públicas
+- Evitar `any`; usar `unknown` quando o tipo for incerto
+- Usar `interface` para objetos extensíveis, `type` para unions e aliases
+
+## Exports
+
+- Preferir **named exports** em módulos reutilizáveis
+- Default export aceitável em entry points (`main.tsx`, páginas raiz)
+
+## Imports
+
+- Agrupar: externos → internos → tipos
+- Usar paths relativos (sem alias configurado ainda)
+
+## Exemplo
+
+```typescript
+// ❌ Evitar
+function handle(data: any) { ... }
+
+// ✅ Preferir
+function handle(data: UserPayload): void { ... }
+```

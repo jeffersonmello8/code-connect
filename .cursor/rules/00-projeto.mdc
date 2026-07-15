@@ -1,0 +1,39 @@
+---
+description: Contexto e princípios do monorepo code-connect
+alwaysApply: true
+---
+
+# Monorepo code-connect
+
+## Estrutura
+
+- `apps/web` — React 19 + Vite + Tailwind + Atomic Design + Oxlint
+- `apps/api` — NestJS 11 + REST + ESLint + Prettier + Jest
+- Gerenciador: **pnpm** (workspace em `apps/*`)
+
+## Scripts (executar na raiz)
+
+| Comando | Ação |
+|---------|------|
+| `pnpm dev:web` | Dev frontend |
+| `pnpm dev:api` | Dev backend (watch) |
+| `pnpm lint:web` | Oxlint |
+| `pnpm lint:api` | ESLint |
+| `pnpm build:web` | Build frontend |
+| `pnpm build:api` | Build backend |
+
+## Princípios de implementação
+
+1. **Escopo mínimo** — altere só o necessário; não refatore código não relacionado
+2. **Convenções existentes** — leia arquivos similares antes de criar novos
+3. **Sem segredos** — nunca commitar `.env`, credenciais ou tokens
+4. **Arquivos gerados** — nunca editar `dist/`, `coverage/` ou `node_modules/`
+5. **Comunicação** — responder em português
+6. **Commits** — Conventional Commits (`feat(web): ...`, `fix(api): ...`)
+7. **Testes web** — todo componente com teste de uso essencial
+8. **API REST** — verbos HTTP, status codes e URLs de recursos corretos
+
+## Contexto por app
+
+- Frontend: ver `apps/web/AGENTS.md`
+- Backend: ver `apps/api/AGENTS.md`
