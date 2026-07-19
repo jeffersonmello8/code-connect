@@ -25,7 +25,7 @@ describe('LoginForm', () => {
     const user = userEvent.setup()
     renderLoginForm()
 
-    await user.click(screen.getByRole('button', { name: 'Login →' }))
+    await user.click(screen.getByRole('button', { name: 'Login' }))
 
     expect(screen.getByText('Email ou usuário é obrigatório')).toBeInTheDocument()
     expect(screen.getByText('Senha é obrigatória')).toBeInTheDocument()
@@ -38,7 +38,7 @@ describe('LoginForm', () => {
 
     await user.type(screen.getByLabelText('Email ou usuário'), 'user@example.com')
     await user.type(screen.getByLabelText('Senha'), '123456')
-    await user.click(screen.getByRole('button', { name: 'Login →' }))
+    await user.click(screen.getByRole('button', { name: 'Login' }))
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith({
