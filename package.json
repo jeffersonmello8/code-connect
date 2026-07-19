@@ -8,6 +8,8 @@
     "build:api": "pnpm --filter api build",
     "lint:web": "pnpm --filter web lint",
     "lint:api": "pnpm --filter api lint",
+    "test:web": "pnpm --filter web test",
+    "test:a11y": "pnpm --filter web test:a11y",
     "preview:web": "pnpm --filter web preview"
   }
 }
