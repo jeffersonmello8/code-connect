@@ -5,7 +5,7 @@ import { AuthLayout } from './AuthLayout'
 describe('AuthLayout', () => {
   it('should render banner and children in centered card', () => {
     render(
-      <AuthLayout bannerSrc="/banner-login.png" bannerAlt="Banner de login">
+      <AuthLayout bannerSrc="/banner-login.webp" bannerAlt="Banner de login">
         <p>Conteúdo do formulário</p>
       </AuthLayout>,
     )

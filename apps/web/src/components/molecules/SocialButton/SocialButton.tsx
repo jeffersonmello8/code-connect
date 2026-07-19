@@ -2,9 +2,9 @@ import { cn } from '../../../lib/cn'
 
 export type SocialProvider = 'github' | 'gmail'
 
-const providerAssets: Record<SocialProvider, { src: string; alt: string }> = {
-  github: { src: '/github.png', alt: 'Logo do GitHub' },
-  gmail: { src: '/gmail.png', alt: 'Logo do Gmail' },
+const providerAssets: Record<SocialProvider, { src: string }> = {
+  github: { src: '/github.svg' },
+  gmail: { src: '/gmail.svg' },
 }
 
 export interface SocialButtonProps {
@@ -20,19 +20,21 @@ export function SocialButton({ provider, label, onClick }: SocialButtonProps) {
     <button
       type="button"
       onClick={onClick}
-      aria-label={label}
       className={cn(
         'flex flex-col items-center gap-2 rounded-lg p-2',
-        'text-text transition-opacity hover:opacity-80',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent',
+        'text-offwhite transition-opacity hover:opacity-80',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-verde-destaque',
       )}
     >
       <img
         src={asset.src}
-        alt={asset.alt}
+        alt=""
+        aria-hidden="true"
+        width={40}
+        height={40}
         className="h-10 w-10 object-contain"
       />
-      <span className="text-sm text-text-muted">{label}</span>
+      <span className="text-xs text-offwhite">{label}</span>
     </button>
   )
 }

@@ -1,5 +1,5 @@
 import { type ReactNode } from 'react'
-import { BrandMark } from '../../atoms/BrandMark'
+
 import { AuthBanner } from '../../organisms/AuthBanner'
 
 export interface AuthLayoutProps {
@@ -8,27 +8,41 @@ export interface AuthLayoutProps {
   children: ReactNode
 }
 
+const BRAND_MARK_WIDTH = 814
+const BRAND_MARK_HEIGHT = 972
+
 function WatermarkPattern() {
   return (
     <div
       className="pointer-events-none absolute inset-0 overflow-hidden"
       aria-hidden="true"
     >
-      <div className="grid h-full w-full grid-cols-3 gap-12 p-8 opacity-[0.04] sm:grid-cols-4 md:grid-cols-5">
-        {Array.from({ length: 20 }).map((_, index) => (
-          <BrandMark key={index} className="mx-auto h-20 w-20" />
-        ))}
-      </div>
+      <img
+        src="/brand-mark.webp"
+        alt=""
+        width={BRAND_MARK_WIDTH}
+        height={BRAND_MARK_HEIGHT}
+        decoding="async"
+        className="absolute right-[8%] bottom-0 h-[486px] w-[407px] opacity-30"
+      />
+      <img
+        src="/brand-mark.webp"
+        alt=""
+        width={BRAND_MARK_WIDTH}
+        height={BRAND_MARK_HEIGHT}
+        decoding="async"
+        className="absolute left-[8%] top-0 h-[487px] w-[407px] opacity-30"
+      />
     </div>
   )
 }
 
 export function AuthLayout({ bannerSrc, bannerAlt, children }: AuthLayoutProps) {
   return (
-    <div className="relative flex min-h-svh items-center justify-center bg-surface px-4 py-8">
+    <div className="relative flex min-h-svh items-center justify-center bg-grafite px-4 py-8">
       <WatermarkPattern />
 
-      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-2xl border border-border bg-surface-elevated shadow-2xl">
+      <div className="relative z-10 flex w-full max-w-5xl overflow-hidden rounded-4xl border border-grafite bg-cinza-escuro shadow-2xl">
         <aside className="hidden min-h-[560px] w-1/2 lg:block">
           <AuthBanner src={bannerSrc} alt={bannerAlt} />
         </aside>

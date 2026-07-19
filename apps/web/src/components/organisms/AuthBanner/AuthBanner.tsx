@@ -1,20 +1,35 @@
-import { BrandMark } from '../../atoms/BrandMark'
-
 export interface AuthBannerProps {
   src: string
   alt: string
 }
 
+const BANNER_WIDTH = 1024
+const BANNER_HEIGHT = 683
+const LOGO_WIDTH = 160
+const LOGO_HEIGHT = 50
+
 export function AuthBanner({ src, alt }: AuthBannerProps) {
   return (
     <div className="relative h-full w-full overflow-hidden">
-      <img src={src} alt={alt} className="h-full w-full object-cover" />
+      <img
+        src={src}
+        alt={alt}
+        width={BANNER_WIDTH}
+        height={BANNER_HEIGHT}
+        fetchPriority="high"
+        decoding="async"
+        className="h-full w-full object-cover"
+      />
 
-      <div className="absolute inset-x-0 bottom-0 flex items-center justify-center gap-2 bg-gradient-to-t from-black/80 to-transparent px-6 py-8">
-        <BrandMark className="h-8 w-8" />
-        <span className="text-lg font-semibold tracking-wide text-text">
-          code connect
-        </span>
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-center px-6 py-8">
+        <img
+          src="/logo-code-connect.webp"
+          alt="code connect"
+          width={LOGO_WIDTH}
+          height={LOGO_HEIGHT}
+          decoding="async"
+          className="h-10 w-auto"
+        />
       </div>
     </div>
   )
