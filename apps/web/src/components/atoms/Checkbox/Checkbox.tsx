@@ -17,10 +17,10 @@ export function Checkbox({ label, className, id, ...props }: CheckboxProps) {
       <input
         id={inputId}
         type="checkbox"
-        className="h-4 w-4 rounded border-border bg-surface-elevated accent-accent"
+        className="h-4 w-4 rounded border-grafite bg-cinza-escuro accent-verde-destaque"
         {...props}
       />
-      <span className="text-sm text-text-muted">{label}</span>
+      <span className="text-sm text-cinza-medio">{label}</span>
     </label>
   )
 }

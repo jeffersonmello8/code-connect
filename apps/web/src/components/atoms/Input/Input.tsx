@@ -10,12 +10,12 @@ export function Input({ error, className, disabled, ...props }: InputProps) {
     <input
       disabled={disabled}
       className={cn(
-        'w-full rounded-lg border bg-surface-elevated px-4 py-2.5 text-text',
-        'placeholder:text-text-muted',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-surface',
+        'w-full rounded border border-transparent bg-cinza-medio px-4 py-2 text-sm text-cinza-escuro',
+        'placeholder:text-cinza-escuro/70',
+        'focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-cinza-escuro',
         error
           ? 'border-error focus:ring-error'
-          : 'border-border focus:border-accent focus:ring-accent',
+          : 'focus:border-verde-destaque focus:ring-verde-destaque',
         disabled && 'cursor-not-allowed opacity-50',
         className,
       )}
