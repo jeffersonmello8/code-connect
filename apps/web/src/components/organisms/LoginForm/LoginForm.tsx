@@ -9,20 +9,30 @@ import { useLoginForm, type LoginFormData } from '../../../hooks/useLoginForm'
 
 export interface LoginFormProps {
   onSubmit?: (data: LoginFormData) => void | Promise<void>
+  formError?: string | null
+  onFormErrorClear?: () => void
 }
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm({
+  onSubmit,
+  formError: externalFormError,
+  onFormErrorClear,
+}: LoginFormProps) {
   const {
-    identifier,
+    email,
     password,
     rememberMe,
     errors,
+    formError: internalFormError,
     submitting,
-    setIdentifier,
+    setEmail,
     setPassword,
     setRememberMe,
+    setFormError,
     handleSubmit,
   } = useLoginForm({ onSubmit })
+
+  const formError = externalFormError ?? internalFormError
 
   return (
     <form
@@ -37,15 +47,25 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
         </p>
       </header>
 
+      {formError ? (
+        <p role="alert" className="text-sm text-red-400">
+          {formError}
+        </p>
+      ) : null}
+
       <div className="flex flex-col gap-4">
         <FormField
-          id="identifier"
-          label="Email ou usuário"
-          type="text"
-          placeholder="usuario123"
-          value={identifier}
-          error={errors.identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          id="email"
+          label="Email"
+          type="email"
+          placeholder="seu@email.com"
+          value={email}
+          error={errors.email}
+          onChange={(e) => {
+            onFormErrorClear?.()
+            setFormError(null)
+            setEmail(e.target.value)
+          }}
         />
 
         <div className="flex flex-col gap-2">
@@ -56,7 +76,11 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
             placeholder="******"
             value={password}
             error={errors.password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              onFormErrorClear?.()
+              setFormError(null)
+              setPassword(e.target.value)
+            }}
           />
 
           <div className="flex items-center justify-between">

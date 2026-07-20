@@ -55,10 +55,12 @@ export function useRegisterForm({ onSubmit }: UseRegisterFormOptions = {}) {
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState<RegisterFormErrors>({})
+  const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setFormError(null)
 
     const validationErrors = validate(name, email, password)
     setErrors(validationErrors)
@@ -81,11 +83,13 @@ export function useRegisterForm({ onSubmit }: UseRegisterFormOptions = {}) {
     password,
     rememberMe,
     errors,
+    formError,
     submitting,
     setName,
     setEmail,
     setPassword,
     setRememberMe,
+    setFormError,
     handleSubmit,
   }
 }

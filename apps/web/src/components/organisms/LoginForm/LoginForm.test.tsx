@@ -16,7 +16,7 @@ describe('LoginForm', () => {
   it('should render form fields', () => {
     renderLoginForm()
     expect(screen.getByRole('heading', { name: 'Login' })).toBeInTheDocument()
-    expect(screen.getByLabelText('Email ou usuário')).toBeInTheDocument()
+    expect(screen.getByLabelText('Email')).toBeInTheDocument()
     expect(screen.getByLabelText('Senha')).toBeInTheDocument()
     expect(screen.getByLabelText('Lembrar-me')).toBeInTheDocument()
   })
@@ -27,7 +27,7 @@ describe('LoginForm', () => {
 
     await user.click(screen.getByRole('button', { name: 'Login' }))
 
-    expect(screen.getByText('Email ou usuário é obrigatório')).toBeInTheDocument()
+    expect(screen.getByText('Email é obrigatório')).toBeInTheDocument()
     expect(screen.getByText('Senha é obrigatória')).toBeInTheDocument()
   })
 
@@ -36,13 +36,13 @@ describe('LoginForm', () => {
     const onSubmit = vi.fn()
     renderLoginForm({ onSubmit })
 
-    await user.type(screen.getByLabelText('Email ou usuário'), 'user@example.com')
+    await user.type(screen.getByLabelText('Email'), 'user@example.com')
     await user.type(screen.getByLabelText('Senha'), '123456')
     await user.click(screen.getByRole('button', { name: 'Login' }))
 
     await waitFor(() => {
       expect(onSubmit).toHaveBeenCalledWith({
-        identifier: 'user@example.com',
+        email: 'user@example.com',
         password: '123456',
         rememberMe: false,
       })
@@ -55,5 +55,10 @@ describe('LoginForm', () => {
       'href',
       '/register',
     )
+  })
+
+  it('should render form error message', () => {
+    renderLoginForm({ formError: 'Email ou senha inválidos' } as never)
+    expect(screen.getByRole('alert')).toHaveTextContent('Email ou senha inválidos')
   })
 })

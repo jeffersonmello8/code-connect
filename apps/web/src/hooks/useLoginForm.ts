@@ -1,12 +1,12 @@
 import { type FormEvent, useState } from 'react'
 
 export interface LoginFormErrors {
-  identifier?: string
+  email?: string
   password?: string
 }
 
 export interface LoginFormData {
-  identifier: string
+  email: string
   password: string
   rememberMe: boolean
 }
@@ -16,20 +16,15 @@ export interface UseLoginFormOptions {
 }
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const USERNAME_REGEX = /^[a-zA-Z0-9._-]{3,}$/
 
-function validate(identifier: string, password: string): LoginFormErrors {
+function validate(email: string, password: string): LoginFormErrors {
   const errors: LoginFormErrors = {}
-  const trimmed = identifier.trim()
+  const trimmedEmail = email.trim()
 
-  if (!trimmed) {
-    errors.identifier = 'Email ou usuário é obrigatório'
-  } else if (trimmed.includes('@')) {
-    if (!EMAIL_REGEX.test(trimmed)) {
-      errors.identifier = 'E-mail inválido'
-    }
-  } else if (!USERNAME_REGEX.test(trimmed)) {
-    errors.identifier = 'Usuário inválido (mínimo 3 caracteres)'
+  if (!trimmedEmail) {
+    errors.email = 'Email é obrigatório'
+  } else if (!EMAIL_REGEX.test(trimmedEmail)) {
+    errors.email = 'E-mail inválido'
   }
 
   if (!password) {
@@ -42,16 +37,18 @@ function validate(identifier: string, password: string): LoginFormErrors {
 }
 
 export function useLoginForm({ onSubmit }: UseLoginFormOptions = {}) {
-  const [identifier, setIdentifier] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [rememberMe, setRememberMe] = useState(false)
   const [errors, setErrors] = useState<LoginFormErrors>({})
+  const [formError, setFormError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    setFormError(null)
 
-    const validationErrors = validate(identifier, password)
+    const validationErrors = validate(email, password)
     setErrors(validationErrors)
 
     if (Object.keys(validationErrors).length > 0) {
@@ -60,21 +57,23 @@ export function useLoginForm({ onSubmit }: UseLoginFormOptions = {}) {
 
     setSubmitting(true)
     try {
-      await onSubmit?.({ identifier, password, rememberMe })
+      await onSubmit?.({ email, password, rememberMe })
     } finally {
       setSubmitting(false)
     }
   }
 
   return {
-    identifier,
+    email,
     password,
     rememberMe,
     errors,
+    formError,
     submitting,
-    setIdentifier,
+    setEmail,
     setPassword,
     setRememberMe,
+    setFormError,
     handleSubmit,
   }
 }

@@ -1,19 +1,33 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { AuthProvider } from '../../contexts/AuthContext'
+import * as authApi from '../../lib/api/authApi'
 import { axe } from '../../test/a11y'
 import { LoginPage } from './LoginPage'
 
+vi.mock('../../lib/api/authApi', () => ({
+  login: vi.fn(),
+  register: vi.fn(),
+  me: vi.fn(),
+}))
+
 function renderLoginPage() {
   return render(
-    <MemoryRouter>
-      <LoginPage />
-    </MemoryRouter>,
+    <AuthProvider>
+      <MemoryRouter>
+        <LoginPage />
+      </MemoryRouter>
+    </AuthProvider>,
   )
 }
 
 describe('LoginPage a11y (WCAG AA)', () => {
+  beforeEach(() => {
+    vi.mocked(authApi.me).mockRejectedValue(new Error('no session'))
+  })
+
   it('should have no accessibility violations on initial render', async () => {
     const { container } = renderLoginPage()
 
@@ -25,7 +39,7 @@ describe('LoginPage a11y (WCAG AA)', () => {
     const { container } = renderLoginPage()
 
     await user.click(screen.getByRole('button', { name: 'Login' }))
-    expect(screen.getByText('Email ou usuário é obrigatório')).toBeInTheDocument()
+    expect(screen.getByText('Email é obrigatório')).toBeInTheDocument()
 
     expect(await axe(container)).toHaveNoViolations()
   })

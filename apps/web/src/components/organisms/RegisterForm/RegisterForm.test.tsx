@@ -60,4 +60,9 @@ describe('RegisterForm', () => {
       '/login',
     )
   })
+
+  it('should render form error message', () => {
+    renderRegisterForm({ formError: 'E-mail já cadastrado' } as never)
+    expect(screen.getByRole('alert')).toHaveTextContent('E-mail já cadastrado')
+  })
 })

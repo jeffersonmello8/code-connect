@@ -12,22 +12,32 @@ import {
 
 export interface RegisterFormProps {
   onSubmit?: (data: RegisterFormData) => void | Promise<void>
+  formError?: string | null
+  onFormErrorClear?: () => void
 }
 
-export function RegisterForm({ onSubmit }: RegisterFormProps) {
+export function RegisterForm({
+  onSubmit,
+  formError: externalFormError,
+  onFormErrorClear,
+}: RegisterFormProps) {
   const {
     name,
     email,
     password,
     rememberMe,
     errors,
+    formError: internalFormError,
     submitting,
     setName,
     setEmail,
     setPassword,
     setRememberMe,
+    setFormError,
     handleSubmit,
   } = useRegisterForm({ onSubmit })
+
+  const formError = externalFormError ?? internalFormError
 
   return (
     <form
@@ -44,6 +54,12 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
         </p>
       </header>
 
+      {formError ? (
+        <p role="alert" className="text-sm text-red-400">
+          {formError}
+        </p>
+      ) : null}
+
       <div className="flex flex-col gap-4">
         <FormField
           id="name"
@@ -52,7 +68,11 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
           placeholder="Nome completo"
           value={name}
           error={errors.name}
-          onChange={(e) => setName(e.target.value)}
+          onChange={(e) => {
+            onFormErrorClear?.()
+            setFormError(null)
+            setName(e.target.value)
+          }}
         />
 
         <FormField
@@ -62,7 +82,11 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
           placeholder="Digite seu email"
           value={email}
           error={errors.email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            onFormErrorClear?.()
+            setFormError(null)
+            setEmail(e.target.value)
+          }}
         />
 
         <div className="flex flex-col gap-2">
@@ -73,7 +97,11 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             placeholder="******"
             value={password}
             error={errors.password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={(e) => {
+              onFormErrorClear?.()
+              setFormError(null)
+              setPassword(e.target.value)
+            }}
           />
 
           <Checkbox
