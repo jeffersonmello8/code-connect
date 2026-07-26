@@ -1,4 +1,4 @@
-import { type ChangeEvent } from 'react'
+import { type ChangeEvent, type KeyboardEvent } from 'react'
 import { Input } from '../../atoms/Input'
 import { Label } from '../../atoms/Label'
 
@@ -10,6 +10,7 @@ export interface FormFieldProps {
   placeholder?: string
   error?: string
   onChange: (event: ChangeEvent<HTMLInputElement>) => void
+  onKeyDown?: (event: KeyboardEvent<HTMLInputElement>) => void
 }
 
 export function FormField({
@@ -20,6 +21,7 @@ export function FormField({
   placeholder,
   error,
   onChange,
+  onKeyDown,
 }: FormFieldProps) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -32,6 +34,7 @@ export function FormField({
         placeholder={placeholder}
         error={Boolean(error)}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         aria-invalid={Boolean(error)}
         aria-describedby={error ? `${id}-error` : undefined}
       />
