@@ -4,12 +4,20 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 
 import { TypeOrmModule } from '@nestjs/typeorm';
 
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+
 import { AppController } from './app.controller';
 
 import { AppService } from './app.service';
 
 import { AuthModule } from './auth/auth.module';
 
+import { Comment } from './posts/entities/comment.entity';
+import { Like } from './posts/entities/like.entity';
+import { Post } from './posts/entities/post.entity';
+import { PostsModule } from './posts/posts.module';
+import { UploadsModule } from './uploads/uploads.module';
 import { User } from './users/entities/user.entity';
 
 import { UsersModule } from './users/users.module';
@@ -17,6 +25,11 @@ import { UsersModule } from './users/users.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'),
+      serveRoot: '/uploads',
+    }),
 
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -28,10 +41,7 @@ import { UsersModule } from './users/users.module';
 
         host: configService.get<string>('DATABASE_HOST', 'localhost'),
 
-        port: parseInt(
-          configService.get<string>('DATABASE_PORT', '5432'),
-          10,
-        ),
+        port: parseInt(configService.get<string>('DATABASE_PORT', '5432'), 10),
 
         username: configService.get<string>('DATABASE_USER', 'codeconnect'),
 
@@ -43,15 +53,25 @@ import { UsersModule } from './users/users.module';
 
         database: configService.get<string>('DATABASE_NAME', 'codeconnect'),
 
-        entities: [User],
+        entities: [User, Post, Like, Comment],
 
-        synchronize: configService.get<string>('NODE_ENV') !== 'production',
+        migrations: [join(__dirname, 'database/migrations/*{.ts,.js}')],
+
+        migrationsRun:
+          configService.get<string>('DATABASE_MIGRATIONS_RUN', 'true') ===
+          'true',
+
+        synchronize: false,
       }),
     }),
 
     UsersModule,
 
     AuthModule,
+
+    PostsModule,
+
+    UploadsModule,
   ],
 
   controllers: [AppController],
